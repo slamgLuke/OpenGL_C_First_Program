@@ -12,36 +12,43 @@
 #define FRAG_SHADER SHADER_PATH "simple.frag"
 
 
+GLFWwindow* initWindow(int width, int height, const char* title)
+{
+    GLFWwindow* window;
+
+    // Initialize GLFW
+    if (!glfwInit()) {
+        fprintf(stderr, "Failed to initialize GLFW\n");
+        return NULL;
+    }
+
+    // Open a window and create its OpenGL context
+    window = glfwCreateWindow(width, height, title, NULL, NULL);
+    if (window == NULL) {
+        fprintf(stderr, "Failed to open GLFW window\n");
+        glfwTerminate();
+        return NULL;
+    }
+
+    // Initialize GLEW
+    glfwMakeContextCurrent(window);
+    if (glewInit() != GLEW_OK) {
+        fprintf(stderr, "Failed to initialize GLEW\n");
+        return NULL;
+    }
+
+    // Ensure we can capture the escape key being pressed below
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+
+    return window;
+}
+
 
 int main()
 {
     glewExperimental = 1;
-
-    if (!glfwInit()) {
-        fprintf(stderr, "Failed to initialize GLFW\n");
-        return -1;
-    }
-
-    glfwWindowHint(GLFW_SAMPLES, 4);                // 4x antialiasing
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  // OpenGL 3.3
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);  // MacOS
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // New OpenGL
-
-    GLFWwindow* window;
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (window == NULL) {
-        fprintf(stderr, "Failed to open GLFW window\n");
-        glfwTerminate();
-        return -1;
-    }
-
-    glfwMakeContextCurrent(window);  // Initialize GLEW
-    if (glewInit() != GLEW_OK) {
-        fprintf(stderr, "Failed to initialize GLEW\n");
-        return -1;
-    }
-    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    GLFWwindow* window = initWindow(600, 400, "Hello World! :)");
+    if (window == NULL) return 1;
 
 
     printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
