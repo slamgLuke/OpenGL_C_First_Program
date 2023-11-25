@@ -49,9 +49,7 @@ int main()
     glewExperimental = 1;
     GLFWwindow* window = initWindow(600, 400, "Hello World! :)");
     if (window == NULL) return 1;
-
-
-    printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
+    printf("OpenGL: version supported by this platform (%s): \n", glGetString(GL_VERSION));
 
 
     // VAO
@@ -68,8 +66,6 @@ int main()
     };
 
 
-
-
     // This will identify our vertex buffer
     GLuint vertexbuffer;
     // Generate 1 buffer, put the resulting identifier in vertexbuffer
@@ -80,24 +76,18 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
 
-
-
     // Create and compile our GLSL program from the shaders
     GLuint programID = LoadShaders(VERT_SHADER, FRAG_SHADER);
 
 
-
     // Main loop
-
     do {
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
 
 
         // Use our shader
         glUseProgram(programID);
-        
 
         
         // 1rst attribute buffer : vertices
@@ -117,8 +107,6 @@ int main()
         glDisableVertexAttribArray(0);
 
 
-
-
         // Swap buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -126,8 +114,5 @@ int main()
     while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && // Exit if the ESC key was pressed
            glfwWindowShouldClose(window) == 0);                 // or window was closed
 
-
-
-    printf("Bye!\n");
     return 0;
 }
