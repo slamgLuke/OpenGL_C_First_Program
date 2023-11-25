@@ -33,7 +33,7 @@ $ make build
 
 ```bash
 $ make run
-```G
+```
 
 
 
