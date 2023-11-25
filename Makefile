@@ -7,6 +7,12 @@ BIN_DIR = bin
 SRCS = $(SRC_DIR)/main.c $(SRC_DIR)/shaderLoader.c
 EXEC = $(BIN_DIR)/exec
 
-all:
+buildrun: $(SRCS)
 		$(CC) $(CFLAGS) -g -o $(EXEC) $(SRCS) $(LINKER_FLAGS)
+		./$(EXEC)
+
+build: $(SRCS)
+		$(CC) $(CFLAGS) -g -o $(EXEC) $(SRCS) $(LINKER_FLAGS)
+
+run: $(EXEC)
 		./$(EXEC)
