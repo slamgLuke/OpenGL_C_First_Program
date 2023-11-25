@@ -1,10 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
+//
+// Function for loading shader files
+//
+#include "shaderLoader.h"
 
 GLuint LoadShaders(const char *vertex_file_path, const char *fragment_file_path) {
 
