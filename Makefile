@@ -4,7 +4,7 @@ LINKER_FLAGS = -lGL -lglfw -lGLEW -lcglm
 SRC_DIR = src
 BIN_DIR = bin
 
-SRCS = $(SRC_DIR)/main.c $(SRC_DIR)/shaderLoader.c
+SRCS = $(SRC_DIR)/main.c $(SRC_DIR)/shaderLoader.c $(SRC_DIR)/initWindow.c
 EXEC = $(BIN_DIR)/exec
 
 buildrun: $(SRCS)

@@ -1,13 +1,13 @@
 #include "initWindow.h"
 #include "shaderLoader.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <cglm/cglm.h>
-
-#include <stdio.h>
-#include <stdlib.h>
 
 
 #define SHADER_PATH "shaders/"
