@@ -8,8 +8,8 @@
 #include "shaderLoader.h"
 
 #define SHADER_PATH "shaders/"
-#define VERT_SHADER SHADER_PATH "simple.vert"
-#define FRAG_SHADER SHADER_PATH "simple.frag"
+#define VERT_SHADER SHADER_PATH "vert.glsl"
+#define FRAG_SHADER SHADER_PATH "2dgrad_frag.glsl"
 
 
 GLFWwindow* initWindow(int width, int height, const char* title)
@@ -22,6 +22,10 @@ GLFWwindow* initWindow(int width, int height, const char* title)
         return NULL;
     }
 
+    // Set GLFW version tp 4.60
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    
     // Open a window and create its OpenGL context
     window = glfwCreateWindow(width, height, title, NULL, NULL);
     if (window == NULL) {
@@ -53,16 +57,16 @@ int main()
 
 
     // VAO
-    GLuint VertexArrayID;
-    glGenVertexArrays(1, &VertexArrayID);
-    glBindVertexArray(VertexArrayID);
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
     // An array of 3 vectors which represents 3 vertices
     static const GLfloat g_vertex_buffer_data[] = {
-        -0.9f, -0.9f, 0.0f,
-        0.9f, -0.9f, 0.0f,
-        0.9f, 0.9f, 0.0f,
-        -0.9f,  0.9f, 0.0f
+        0.f, 0.f, 0.f,
+        1.f, 0.f, 0.f,
+        1.f, 1.f, 0.f,
+        0.f, 1.f, 0.f
     };
 
 
@@ -83,8 +87,10 @@ int main()
     // Main loop
     do {
         // Clear the screen
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT);
 
+        // Bind vao
+        glBindVertexArray(vao);
 
         // Use our shader
         glUseProgram(programID);
@@ -105,6 +111,10 @@ int main()
         // Draw shape
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
         glDisableVertexAttribArray(0);
+
+
+        // Unbind vao
+        glBindVertexArray(0);
 
 
         // Swap buffers
