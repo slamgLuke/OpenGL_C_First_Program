@@ -9,7 +9,7 @@
 
 #define SHADER_PATH "shaders/"
 #define VERT_SHADER SHADER_PATH "vert.glsl"
-#define FRAG_SHADER SHADER_PATH "2dgrad_frag.glsl"
+#define FRAG_SHADER SHADER_PATH "checkers_frag.glsl"
 
 
 GLFWwindow* initWindow(int width, int height, const char* title)
@@ -83,6 +83,10 @@ int main()
     // Create and compile our GLSL program from the shaders
     GLuint programID = LoadShaders(VERT_SHADER, FRAG_SHADER);
 
+    // Clock for shaders
+    GLint timeUniform = glGetUniformLocation(programID, "time");
+    double startTime = glfwGetTime();
+    
 
     // Main loop
     do {
@@ -94,6 +98,11 @@ int main()
 
         // Use our shader
         glUseProgram(programID);
+
+
+        // Set time uniform variable
+        double currentTime = glfwGetTime();
+        glUniform1f(timeUniform, (float)(currentTime - startTime));
 
         
         // 1rst attribute buffer : vertices
