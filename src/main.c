@@ -3,8 +3,13 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <cglm/cglm.h>
 
 #include "shaderLoader.h"
+
+#define SHADER_PATH "shaders/"
+#define VERT_SHADER SHADER_PATH "simple.vert"
+#define FRAG_SHADER SHADER_PATH "simple.frag"
 
 
 
@@ -36,15 +41,10 @@ int main()
         fprintf(stderr, "Failed to initialize GLEW\n");
         return -1;
     }
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+
 
     printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
-    
-
-
-    // Triangle
-    //
-
-    // Tutorial 2
 
 
     // VAO
@@ -52,13 +52,15 @@ int main()
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
 
-
     // An array of 3 vectors which represents 3 vertices
     static const GLfloat g_vertex_buffer_data[] = {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
+        -0.9f, -0.9f, 0.0f,
+        0.9f, -0.9f, 0.0f,
+        0.9f, 0.9f, 0.0f,
+        -0.9f,  0.9f, 0.0f
     };
+
+
 
 
     // This will identify our vertex buffer
@@ -73,33 +75,25 @@ int main()
 
 
 
-
     // Create and compile our GLSL program from the shaders
-    GLuint programID = LoadShaders( "SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
+    GLuint programID = LoadShaders(VERT_SHADER, FRAG_SHADER);
 
 
 
-
-    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    // Main loop
 
     do {
-
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
 
 
-
         // Use our shader
         glUseProgram(programID);
-        // Draw triangle...
         
 
-
-
-        // Tutorial 2
-        //
-        // 1st attribute buffer : vertices
+        
+        // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glVertexAttribPointer(
@@ -110,8 +104,9 @@ int main()
             0,                  // stride
             NULL            // array buffer offset
         );
-        // Draw the triangle !
-        glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+
+        // Draw shape
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
         glDisableVertexAttribArray(0);
 
 
@@ -120,7 +115,6 @@ int main()
         // Swap buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
-
     }
     while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && // Exit if the ESC key was pressed
            glfwWindowShouldClose(window) == 0);                 // or window was closed
