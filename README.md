@@ -3,6 +3,13 @@
 - Basic showcase of window making and importing GLSL files for shading.
 - Makefile for building and running
 
+## Dependencies
+
+- OpenGL
+- glew
+- glfw3
+- cglm
+
 ## Makefile usage
 
 1. Build + Run (default)
@@ -26,7 +33,7 @@ $ make build
 
 ```bash
 $ make run
-```
+```G
 
 
 
