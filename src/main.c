@@ -14,8 +14,8 @@
 #define VERT_SHADER SHADER_PATH "vert.glsl"
 #define FRAG_SHADER SHADER_PATH "checkers_frag.glsl"
 
-#define WIDTH 1920
-#define HEIGHT 1080
+#define WIDTH 600
+#define HEIGHT 400
 
 
 int main()
@@ -26,10 +26,10 @@ int main()
     printf("OpenGL: version supported by this platform (%s): \n", glGetString(GL_VERSION));
 
     static const GLfloat bgVertexData[] = {
-        0.f, 0.f, 0.f,
-        1.f, 0.f, 0.f,
-        1.f, 1.f, 0.f,
-        0.f, 1.f, 0.f
+        0.f, 0.f, 1.f,
+        1.f, 0.f, 1.f,
+        1.f, 1.f, 1.f,
+        0.f, 1.f, 1.f
     };
 
     static const GLfloat cubeVertexdata[] = {
@@ -53,24 +53,19 @@ int main()
     glGenVertexArrays(1, &cubeVAO);
     glGenBuffers(1, &cubeVBO);
 
-    // BG
     glBindVertexArray(bgVAO);
-
     glBindBuffer(GL_ARRAY_BUFFER, bgVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(bgVertexData), bgVertexData, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    glBindVertexArray(0);
 
-    // Cube
     glBindVertexArray(cubeVAO);
-
     glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertexdata), cubeVertexdata, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    glBindVertexArray(0);
 
+    glBindVertexArray(0);
 
 
     GLuint programID = LoadShaders(VERT_SHADER, FRAG_SHADER);
@@ -95,19 +90,20 @@ int main()
         // Set time uniform variable
         double currentTime = glfwGetTime();
         glUniform1f(timeUniform, (float)(currentTime - startTime));
-
-        // Draw BG
+     
+        // BG
         glUniform1i(objectTypeUniform, 0);
         glBindVertexArray(bgVAO);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-        glBindVertexArray(0);
 
-        // Draw cube
+
+        // Cube
         glUniform1i(objectTypeUniform, 1);
         glBindVertexArray(cubeVAO);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 8);
-        glBindVertexArray(0);
 
+
+        glBindVertexArray(0);
 
         // Swap buffers
         glfwSwapBuffers(window);
