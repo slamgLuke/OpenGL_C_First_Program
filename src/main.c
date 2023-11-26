@@ -25,74 +25,87 @@ int main()
     if (window == NULL) return 1;
     printf("OpenGL: version supported by this platform (%s): \n", glGetString(GL_VERSION));
 
-
-    // VAO
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    // An array of 3 vectors which represents 3 vertices
-    static const GLfloat g_vertex_buffer_data[] = {
+    static const GLfloat bgVertexData[] = {
         0.f, 0.f, 0.f,
         1.f, 0.f, 0.f,
         1.f, 1.f, 0.f,
         0.f, 1.f, 0.f
     };
 
+    static const GLfloat cubeVertexdata[] = {
+        // Front face
+        0.25f, 0.25f, -0.25f,
+        0.75f, 0.25f, -0.25f,
+        0.75f, 0.75f, -0.25f,
+        0.25f, 0.75f, -0.25f,
 
-    // This will identify our vertex buffer
-    GLuint vertexbuffer;
-    // Generate 1 buffer, put the resulting identifier in vertexbuffer
-    glGenBuffers(1, &vertexbuffer);
-    // The following commands will talk about our 'vertexbuffer' buffer
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    // Give our vertices to OpenGL.
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+        // Back face
+        0.25f, 0.75f, -0.75f,
+        0.75f, 0.75f, -0.75f,
+        0.75f, 0.25f, -0.75f,
+        0.25f, 0.25f, -0.75f
+    };
+
+    GLuint bgVAO, bgVBO, cubeVAO, cubeVBO;
+    glGenVertexArrays(1, &bgVAO);
+    glGenBuffers(1, &bgVBO);
+
+    glGenVertexArrays(1, &cubeVAO);
+    glGenBuffers(1, &cubeVBO);
+
+    // BG
+    glBindVertexArray(bgVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, bgVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(bgVertexData), bgVertexData, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glBindVertexArray(0);
+
+    // Cube
+    glBindVertexArray(cubeVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertexdata), cubeVertexdata, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glBindVertexArray(0);
 
 
-    // Create and compile our GLSL program from the shaders
+
     GLuint programID = LoadShaders(VERT_SHADER, FRAG_SHADER);
 
-    // Clock for shaders
+    // Clock for checker bg shader
     GLint timeUniform = glGetUniformLocation(programID, "time");
     double startTime = glfwGetTime();
+
+    // Object type uniform
+    GLint objectTypeUniform = glGetUniformLocation(programID, "objectType");
     
+
 
     // Main loop
     do {
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Bind vao
-        glBindVertexArray(vao);
-
         // Use our shader
         glUseProgram(programID);
-
 
         // Set time uniform variable
         double currentTime = glfwGetTime();
         glUniform1f(timeUniform, (float)(currentTime - startTime));
 
-        
-        // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glVertexAttribPointer(
-            0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-            3,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            NULL            // array buffer offset
-        );
-
-        // Draw shape
+        // Draw BG
+        glUniform1i(objectTypeUniform, 0);
+        glBindVertexArray(bgVAO);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-        glDisableVertexAttribArray(0);
+        glBindVertexArray(0);
 
-
-        // Unbind vao
+        // Draw cube
+        glUniform1i(objectTypeUniform, 1);
+        glBindVertexArray(cubeVAO);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 8);
         glBindVertexArray(0);
 
 
