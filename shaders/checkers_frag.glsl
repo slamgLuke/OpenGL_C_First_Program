@@ -1,19 +1,20 @@
 #version 460 core
 
+in vec2 dim;
+
 precision mediump float;
+uniform float time;
 
 out vec4 FragColor;
 
-uniform float time;
-
 void main() {
-    float scaledTime = time * 10.;
+    float scaledTime = time * 5.;
 
-    float x_pos = gl_FragCoord.x / 600.0;
+    float x_pos = gl_FragCoord.x / dim.x;
     float x_color = sin(x_pos * 16. + scaledTime);
     x_color = x_color * 0.5 + 0.5;
 
-    float y_pos = gl_FragCoord.y / 600.0;
+    float y_pos = gl_FragCoord.y / dim.y;
     float y_color = sin(y_pos * 16. + scaledTime);
     y_color = y_color * 0.5 + 0.5;
 

@@ -1,6 +1,8 @@
 #version 460 core
 precision mediump float;
 
+in vec2 dim;
+
 out vec4 FragColor;
 
 void main() {
@@ -11,10 +13,10 @@ void main() {
     vec4 bottom_left = vec4(0.8, 0.6, 0.1, 1.0);
     vec4 bottom_right = vec4(0.7, 0.1, 0.2, 1.0);
 
-    vec4 top = mix(top_left, top_right, gl_FragCoord.x / 600.0);
-    vec4 bottom = mix(bottom_left, bottom_right, gl_FragCoord.x / 600.0);
+    vec4 top = mix(top_left, top_right, gl_FragCoord.x / dim.x);
+    vec4 bottom = mix(bottom_left, bottom_right, gl_FragCoord.x / dim.x);
 
-    vec4 color = mix(bottom, top, gl_FragCoord.y / 400.0);
+    vec4 color = mix(bottom, top, gl_FragCoord.y / dim.y);
 
     FragColor = color;
 }

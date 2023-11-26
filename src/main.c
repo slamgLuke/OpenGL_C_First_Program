@@ -14,11 +14,14 @@
 #define VERT_SHADER SHADER_PATH "vert.glsl"
 #define FRAG_SHADER SHADER_PATH "checkers_frag.glsl"
 
+#define WIDTH 1920
+#define HEIGHT 1080
+
 
 int main()
 {
     glewExperimental = 1;
-    GLFWwindow* window = initWindow(600, 400, "Hello World! :)");
+    GLFWwindow* window = initWindow(WIDTH, HEIGHT, "Hello World! :)");
     if (window == NULL) return 1;
     printf("OpenGL: version supported by this platform (%s): \n", glGetString(GL_VERSION));
 
